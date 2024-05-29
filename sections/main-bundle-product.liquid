@@ -1,0 +1,208 @@
+{{ 'flickity.min.css' | asset_url | stylesheet_tag }}
+{{ 'bundle-kit.css' | asset_url | stylesheet_tag }}
+
+{% liquid
+  assign bundleSize = product.metafields.custom.selection_limit | plus: 0
+%}
+
+<div class="page-width">
+  <div id="build-kit-product">
+    <div class="product-canvas-wrapper">
+      <h1 class="byk-title">{{ product.title }}</h1>
+      <div class="kit-products">
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'kit_sizes' -%}
+              <a
+                href="{{ block.settings.product_link }}"
+                {% if request.path == block.settings.product_link %}
+                  class="active"
+                {% endif %}
+              >
+                {{ block.settings.product_kit_size_name -}}
+              </a>
+          {% endcase %}
+        {% endfor %}
+      </div>
+      <div class="canvas-copy">
+        <p class="canvas-heading">Selected Stencils: <span id="leftCount">0</span> out of {{ bundleSize }}</p>
+        <p class="prod_price">{{ product.price | money_without_trailing_zeros }}</p>
+      </div>
+
+      <div id="product-canvas">
+        <div
+          id="selected-stencils"
+          data-max="{{ bundleSize }}"
+          data-flickity='
+            {
+            "cellAlign": "left",
+            "contain": true,
+            "wrapAround": true,
+            "pageDots": false
+            }
+          '
+          class="flickity-enabled is-draggable"
+          tabindex="0"
+        >
+          {% for i in (1..bundleSize) %}
+            <div class="prod-wrap">
+              <div class="empty" data-stencil-id="stencil_{{ i }}">
+                <button>X</button>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <div class="product__info-wrapper">
+      <div class="product-style-filter">
+        <label for="stencil-kit-filters">Filter by Style:</label>
+        <select id="stencil-kit-filters">
+          <option value="all" selected>All</option>
+          {%- for block in section.blocks -%}
+            {%- case block.type -%}
+              {%- when 'tabs' -%}
+                {% assign headingMob = block.settings.heading %}
+                {% if headingMob != '' %}
+                  <option value="{{ headingMob | handleize }}">{{ headingMob }}</option>
+                {% else %}
+                  {%- assign collection = block.settings.collection -%}
+                  <option value="{{ collection.title | handleize }}">{{ collection.title }}</option>
+                {% endif %}
+            {%- endcase -%}
+          {%- endfor -%}
+        </select>
+      </div>
+
+      <div id="product-filters">
+        <a href="javascript:void(0)" data-selected="all" class="All active">All</a>
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'tabs' -%}
+              {% assign headingDesktop = block.settings.heading %}
+              {% if headingDesktop != '' %}
+                <a
+                  href="javascript:void(0)"
+                  data-selected="{{ headingDesktop | handleize }}"
+                  class="{{ headingDesktop }}"
+                >
+                  {{- headingDesktop -}}
+                </a>
+              {% else %}
+                {%- assign collection = block.settings.collection -%}
+                <a
+                  href="javascript:void(0)"
+                  data-selected="{{ collection.title | handleize }}"
+                  class="{{ collection.title | handleize }}"
+                >
+                  {{- collection.title -}}
+                </a>
+              {% endif %}
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
+
+      <ul id="stencil-products-listings">
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'tabs' -%}
+              {%- assign collection = block.settings.collection -%}
+              {%- assign collection_products = collection.products -%}
+              {%- for product in collection_products -%}
+                <li data-product-collection="all {% if block.settings.heading != '' %}{{block.settings.heading | handleize}}{% else %}{{ collection.title | handleize }}{% endif %}">
+                  <span
+                    data-product-name="{{ product.title }}"
+                    data-product-id="{{ product.selected_or_first_available_variant.id }}"
+                    class="stencil-kit-images"
+                  >
+                    <img
+                      src="{{ product.featured_image | image_url }}"
+                      loading="lazy"
+                      alt="{{ product.featured_image.alt }}"
+                      class="primary-img"
+                      width="200"
+                      height="200"
+                    >
+                    {% liquid
+                      if product.images[1]
+                        assign secImage = product.images[1] | image_url
+                        assign secImageAlt = product.images[1].alt
+                      else
+                        assign secImage = product.featured_image | image_url
+                        assign secImageAlt = product.featured_image.alt
+                      endif
+                    %}
+                    <img
+                      src="{{ secImage }}"
+                      loading="lazy"
+                      alt="{{ secImageAlt }}"
+                      class="secondary-img"
+                      width="200"
+                      height="200"
+                    >
+                  </span>
+                  <span> {{ product.title }} </span>
+                </li>
+              {%- endfor -%}
+          {%- endcase -%}
+        {%- endfor -%}
+      </ul>
+
+      {%- assign product_form_id = 'product-form-' | append: section.id -%}
+      {% render 'buy-buttons-bundle',
+        product: product,
+        product_form_id: product_form_id,
+        section_id: section.id,
+        show_pickup_availability: false,
+        bundleSize: bundleSize
+      %}
+    </div>
+  </div>
+</div>
+
+<script src="{{ 'flickity.min.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'bundle-kit.js' | asset_url }}" defer="defer"></script>
+
+{% schema %}
+{
+  "name": "Product Bundle",
+  "settings": [],
+  "blocks": [
+    {
+      "name": "Kit Sizes",
+      "type": "kit_sizes",
+      "settings": [
+        {
+          "type": "text",
+          "id": "product_kit_size_name",
+          "label": "Product Kit Size Name:",
+          "placeholder": "Small Kit"
+        },
+        {
+          "type": "url",
+          "id": "product_link",
+          "label": "Product Link"
+        }
+      ]
+    },
+    {
+      "name": "Tabs",
+      "type": "tabs",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Title",
+          "info": "Add tab title (if empty collection title will be added)"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

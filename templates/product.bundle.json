@@ -1,0 +1,107 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-bundle-product",
+      "blocks": {
+        "kit_sizes_NNyxjm": {
+          "type": "kit_sizes",
+          "settings": {
+            "product_kit_size_name": "Small Kit",
+            "product_link": "shopify:\/\/products\/build-your-own-henna-kit-4-stencils-copy"
+          }
+        },
+        "kit_sizes_prkjWB": {
+          "type": "kit_sizes",
+          "settings": {
+            "product_kit_size_name": "Large Kit",
+            "product_link": "shopify:\/\/products\/build-your-own-henna-kit-8-stencils-harisdev"
+          }
+        },
+        "tabs_VEwqFQ": {
+          "type": "tabs",
+          "settings": {
+            "heading": "",
+            "collection": "bottoms"
+          }
+        },
+        "tabs_fKpPmg": {
+          "type": "tabs",
+          "settings": {
+            "heading": "",
+            "collection": "floral"
+          }
+        },
+        "tabs_E8fpMw": {
+          "type": "tabs",
+          "settings": {
+            "heading": "",
+            "collection": "geometric"
+          }
+        },
+        "tabs_7FeGUg": {
+          "type": "tabs",
+          "settings": {
+            "heading": "",
+            "collection": "mandala"
+          }
+        },
+        "tabs_jBzfRM": {
+          "type": "tabs",
+          "settings": {
+            "heading": "",
+            "collection": "modern"
+          }
+        },
+        "tabs_XjGCbE": {
+          "type": "tabs",
+          "settings": {
+            "heading": "",
+            "collection": "rings"
+          }
+        },
+        "tabs_4T9N33": {
+          "type": "tabs",
+          "settings": {
+            "heading": "",
+            "collection": "traditional"
+          }
+        }
+      },
+      "block_order": [
+        "kit_sizes_NNyxjm",
+        "kit_sizes_prkjWB",
+        "tabs_VEwqFQ",
+        "tabs_fKpPmg",
+        "tabs_E8fpMw",
+        "tabs_7FeGUg",
+        "tabs_jBzfRM",
+        "tabs_XjGCbE",
+        "tabs_4T9N33"
+      ],
+      "settings": {
+      }
+    },
+    "related-products": {
+      "type": "related-products",
+      "settings": {
+        "heading": "You may also like",
+        "heading_size": "h2",
+        "products_to_show": 4,
+        "columns_desktop": 4,
+        "color_scheme": "scheme-1",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "columns_mobile": "2",
+        "padding_top": 36,
+        "padding_bottom": 28
+      }
+    }
+  },
+  "order": [
+    "main",
+    "related-products"
+  ]
+}
